@@ -10,6 +10,8 @@ public class Dialog : MonoBehaviour
     [SerializeField] GameObject dialogBox;
     [SerializeField] bool isSceneChanging = false;
     [SerializeField] string sceneName;
+    [SerializeField] bool isEndScene = false;
+    [SerializeField] GameObject smasher;
 
     public TextMeshProUGUI textDisplay;
     public string[] sentences;
@@ -81,6 +83,10 @@ public class Dialog : MonoBehaviour
             dialogBox?.SetActive(false);
             playerController.FreezePlayer(false);
 
+            if (isEndScene)
+            {
+                smasher.SetActive(true);
+            }
         }
     }
 }

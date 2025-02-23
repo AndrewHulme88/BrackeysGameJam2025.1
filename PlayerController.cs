@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioClip walkSound;
     [SerializeField] AudioSource oneShotAudioSource;
     [SerializeField] AudioSource walkAudioSource;
+    [SerializeField] float coyotyeTime = 0.2f;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool isMoving = false;
     private AudioManager audioManager;
     private bool isFrozen = false;
+    private float coyotyeTimeCounter;
 
     private void Start()
     {
@@ -46,6 +48,15 @@ public class PlayerController : MonoBehaviour
         }
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        if(isGrounded)
+        {
+            coyotyeTimeCounter = coyotyeTime;
+        }
+        else
+        {
+            coyotyeTimeCounter -= Time.deltaTime;
+        }
 
         if(!wasGrounded && isGrounded)
         {
@@ -88,7 +99,7 @@ public class PlayerController : MonoBehaviour
             walkAudioSource.Stop();
         }
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && coyotyeTimeCounter > 0f)
         {
             if(jumpSound != null)
             {
@@ -96,6 +107,7 @@ public class PlayerController : MonoBehaviour
             }
 
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            coyotyeTimeCounter = 0f;
         }
 
         wasGrounded = isGrounded;
@@ -142,7 +154,7 @@ public class PlayerController : MonoBehaviour
         {
             audioManager.PlaySound();
             GameObject newDeathParticles = Instantiate(deathParticles, transform.position, Quaternion.identity);
-            respawnManager.Respawn();
+            respawnManager?.Respawn();
             DeactivatePlayer();
         }
     }

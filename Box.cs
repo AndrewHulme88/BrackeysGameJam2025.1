@@ -10,6 +10,7 @@ public class Box : MonoBehaviour
     private AudioSource audioSource;
     private LoopingAudioManager loopingAudioManager;
     private Rigidbody2D rb;
+    private bool isDestroyed = false;
 
     private void Start()
     {
@@ -21,6 +22,8 @@ public class Box : MonoBehaviour
 
     private void Update()
     {
+        if (isDestroyed) return;
+
         if(rb.linearVelocityX > 0.1f || rb.linearVelocityX < -0.1f)
         {
             loopingAudioManager.PlaySound();
@@ -29,6 +32,13 @@ public class Box : MonoBehaviour
         {
             loopingAudioManager.StopSound();
         }
+    }
+
+    public void StopSound()
+    {
+        isDestroyed = true;
+        loopingAudioManager.StopSound();
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

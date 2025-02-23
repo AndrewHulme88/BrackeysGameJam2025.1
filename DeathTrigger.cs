@@ -23,7 +23,11 @@ public class DeathTrigger : MonoBehaviour
 
         if(collision.tag == "Box")
         {
-            Destroy(collision.gameObject);
+            Box box = collision.GetComponent<Box>();
+            if(box != null)
+            {
+                box.StopSound();
+            }
         }
     }
 }
