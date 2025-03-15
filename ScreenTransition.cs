@@ -22,4 +22,16 @@ public class ScreenTransition : MonoBehaviour
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene(sceneName);
     }
+
+    public void ReloadCurrentScene()
+    {
+        StartCoroutine(CurrentSceneTransition());
+    }
+
+    IEnumerator CurrentSceneTransition()
+    {
+        anim.SetTrigger("end");
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
